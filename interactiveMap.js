@@ -5,6 +5,7 @@ export default class InteractiveMap {
     }
 
     async init() { 
+        // console.log('ymaps');
         await this.injectYMapsScript();
         await this.loadYMaps();
         this.initMap();
@@ -12,7 +13,7 @@ export default class InteractiveMap {
 
     injectYMapsScript() { 
         return new Promise((resolve) => { 
-            const ymapsScript = document.createElement('script'); \
+            const ymapsScript = document.createElement('script');
             ymapsScript.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c130f06a-ab55-4579-9da0-64a74bd72e96';
             document.body.appendChild(ymapsScript);
             ymapsScript.addEventListener('load', resolve);
