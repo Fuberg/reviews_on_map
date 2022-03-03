@@ -1,25 +1,54 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
+let path = require('path');
+let rules = require('./webpack.config.rules.js')();
+let UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+let HtmlPlugin = require('html-webpack-plugin');
+let CleanWebpackPlugin = require('clean-webpack-plugin');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+rules.push({
+    test: /\.css$/,
+    use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader'
+    })
+})
 
 module.exports = {
-    entry: './index.js',
-    module: {
-        rules: [
-            { test: /\.svg$/, use: 'svg-inline-loader' },
-            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-            { test: /\.(js)$/, use: 'babel-loader' }
-        ]
+    entry: {
+        index: ['babel-polyfill','./src/index.js']
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'index_bundle.js'
+        filename: '[name].[hash].js',
+        path: path.resolve('dist')
+    },
+    devServer: {
+        index: 'index.html',
+        overlay: true
+    },
+    devtool: 'source-map',
+    module: {
+        rules
+    },
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            uglifyOptions: {
+              compress: false,
+              ecma: 6,
+              mangle: true
+            },
+            sourceMap: true
+          })
+        ]
     },
     plugins: [
-        new HtmlWebpackPlugin(),
-        new webpack.EnvironmentPlugin({
-            'NODE_ENV': 'production'
-          })
-    ],
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+        new HtmlPlugin({
+            title: 'GeoReview',
+            template: 'index.hbs'
+        }),
+        new ExtractTextPlugin('style.css'),
+        new CleanWebpackPlugin(['dist'])
+    ]
 }

@@ -5,7 +5,6 @@ export default class InteractiveMap {
     }
 
     async init() { 
-        // console.log('ymaps');
         await this.injectYMapsScript();
         await this.loadYMaps();
         this.initMap();
@@ -14,7 +13,7 @@ export default class InteractiveMap {
     injectYMapsScript() { 
         return new Promise((resolve) => { 
             const ymapsScript = document.createElement('script');
-            ymapsScript.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=c130f06a-ab55-4579-9da0-64a74bd72e96';
+            ymapsScript.src = 'https://api-maps.yandex.ru/2.1/?apikey=c130f06a-ab55-4579-9da0-64a74bd72e96&lang=ru_RU';
             document.body.appendChild(ymapsScript);
             ymapsScript.addEventListener('load', resolve);
         });
@@ -39,6 +38,28 @@ export default class InteractiveMap {
             zoom: 15
         });
         this.map.events.add('click', (e) => this.onClick(e.get('coords')));
-        this.map.getObjects.add(this.clusterer);
+        this.map.geoObjects.add(this.clusterer);
     }
+
+    openBalloon(coords, content) { 
+        this.map.balloon.open(coords, content);
+    }
+
+    setBalloonContent(content) { 
+        this.map.balloon.setData(content);
+    }
+
+    closeBalloon() { 
+        this.map.balloon.close();
+    }
+
+    createPlacemark(coords) { 
+        const placemark = new ymaps.Placemark(coords);
+        placemark.events.add('click', (e) => { 
+            const coords = e.get('target').geometry.getCoordinates();
+            this.onClick(coords);
+        });
+        this.clusterer.add(placemark);
+    }
+
 } 
