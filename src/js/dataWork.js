@@ -13,12 +13,12 @@ export default class DataWork{
 
     addReview(data) { 
         if (localStorage.getItem(data["key"]) === null) {
-            localStorage.setItem(data["key"], [data["review"]]);
+            localStorage.setItem(data["key"], `[${JSON.stringify(data["review"])}]`);
         } else { 
-            let acum = localStorage.getItem(data["key"]).slice();
+            let acum = JSON.parse(localStorage.getItem(data["key"]));
             console.log(acum);
             acum.push(data["review"]);
-            localStorage.setItem(data["key"], acum);
+            localStorage.setItem(data["key"], JSON.stringify(acum));
         }
 
     }
@@ -26,8 +26,8 @@ export default class DataWork{
     getReviewsList(coords) { 
         console.log(coords);
         if (localStorage.getItem(coords) !== null) {
-            console.log(localStorage.getItem(coords));
-            return localStorage.getItem(coords);
+            console.log(JSON.parse(localStorage.getItem(coords)));
+            return JSON.parse(localStorage.getItem(coords));
         } else { 
             return [];
         }
