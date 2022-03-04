@@ -47,7 +47,10 @@ export default class GeoReview {
         const reviewsList = this.stor.getReviewsList(JSON.stringify(coords));
         // console.log(reviewsList);
         const form = this.createForm(coords, reviewsList);
-        this.map.setBalloonContent(form.innerHTML);
+        console.log(form.innerHTML);
+        this.map.closeBalloon();
+        this.map.openBalloon(coords, form.innerHTML);
+        // this.map.setBalloonContent(form.innerHTML);
     }
 
     onDocumentClick(e) { 

@@ -25,8 +25,8 @@ export default class InteractiveMap {
 
     initMap() { 
         this.clusterer = new ymaps.Clusterer({
-            groupByCoordinates: true,
             clusterDisableClickZoom: true,
+            groupByCoordinates: true,
             clusterOpenBaloonOnClick: false,
         });
         this.clusterer.events.add('click', (e) => { 
