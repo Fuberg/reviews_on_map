@@ -43,12 +43,12 @@ export default class GeoReview {
     }
 
     onClick(coords) {
-        this.map.openBalloon(coords, '...загрузка');
+        // this.map.openBalloon(coords, '...загрузка');
         const reviewsList = this.stor.getReviewsList(JSON.stringify(coords));
         // console.log(reviewsList);
-        const form = this.createForm(coords, reviewsList);
-        console.log(form.innerHTML);
-        this.map.closeBalloon();
+        let form = this.createForm(coords, reviewsList);
+        // console.log(form.innerHTML);
+        // this.map.closeBalloon();
         this.map.openBalloon(coords, form.innerHTML);
         // this.map.setBalloonContent(form.innerHTML);
     }
