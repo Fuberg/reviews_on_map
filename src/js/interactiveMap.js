@@ -24,40 +24,28 @@ export default class InteractiveMap {
     }
 
     initMap() { 
+        
         this.clusterer = new ymaps.Clusterer({
             clusterDisableClickZoom: true,
             groupByCoordinates: true,
-            clusterOpenBaloonOnClick: true,
-        });
-        this.clusterer.events.add('click', (e) => { 
+            clusterOpenBalloonOnClick: false,
+         });
+        this.clusterer.events.add('click', (e) => {
+            console.log('cluster click')
             const coords = e.get('target').geometry.getCoordinates();
-            this.onClick(coords, this.clusterer);
+            this.onClick(coords);
         });
         this.map = new ymaps.Map(this.mapId, {
             center: [44.89, 37.31],
             zoom: 15
         });
-        this.map.geoObjects.add(this.clusterer);
+        this.map.geoObjects.add(this.clusterer)
+        
         this.map.events.add('click', (e) => {
             const coords = e.get('coords');
             this.onClick(coords);
         });
-        this.map.events.add('balloonopen', function (event) {
-            // event.preventDefault();
-            console.log("Балун открылся");
-            // this.map.balloon.data.set('content');
-            // event.objectManager.objects.balloon.setData("Балун открылся");
-            // var objectId = e.get('objectId'),
-            //     object = objectManager.objects.getById(objectId);
-            // if (!object.properties) {
-            //     loadObjectData(objectId).then(function (data) {
-            //         if (objectManager.balloon.isOpen(objectid)) {
-            //             object.properties = data;
-            //             objectManager.objects.balloon.setData(object);
-            //         }
-            //     });
-            // }
-        });
+        
     }
 
     openBalloon(coords, content) { 

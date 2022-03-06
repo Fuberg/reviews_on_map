@@ -66,14 +66,10 @@ export default class GeoReview {
                 },
             };
 
-            try {
+            
                 this.stor.addReview(data);
                 this.map.createPlacemark(JSON.parse(coords));
                 this.map.closeBalloon();
-            } catch (e) { 
-                const formError = document.querySelector('.form-error');
-                formError.innerText = e.message;
-            }
         }
     }
 
